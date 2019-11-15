@@ -1,0 +1,20 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+
+namespace Presence.API.Domain
+{
+    public class Instituicao
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        public string Descricao { get; set; }
+
+        public string UserId { get; set; }
+
+        [ForeignKey(nameof(UserId))]
+        public IdentityUser Usuario { get; set; }
+    }
+}

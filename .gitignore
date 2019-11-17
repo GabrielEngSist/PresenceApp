@@ -1,4 +1,6 @@
-/Presence.API/bin
-/Presence.IntegrationTests/bin
-/Presence.API/obj
-/Presence.IntegrationTests/obj
+/Presence.API/bin/
+/Presence.IntegrationTests/bin/
+/Presence.API/obj/
+/Presence.IntegrationTests/obj/
+/.vs/
+/.vscode/

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Presence.API.Data;
 using Presence.API.Domain;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Presence.API.Services
 {
@@ -18,7 +17,6 @@ namespace Presence.API.Services
             _dataContext = dataContext;
         }
 
-
         public async Task<bool> AtualizaPresencaAsync(Presenca presenca)
         {
             _dataContext.Presencas.Update(presenca);
@@ -26,7 +24,7 @@ namespace Presence.API.Services
             return linhas > 0;
         }
 
-public async Task<bool> DeletarPresencaAsync(Guid id)
+        public async Task<bool> DeletarPresencaAsync(Guid id)
         {
             var presenca = await ObterPresencaAsync(id);
 
@@ -48,22 +46,19 @@ public async Task<bool> DeletarPresencaAsync(Guid id)
             return linhas > 0;
         }
 
-
         public async Task<Presenca> ObterPresencaAsync(Guid id)
         {
-            return await _dataContext.Presencas.SingleOrDefaultAsync(predicate:p => p.Id == id);
+            return await _dataContext.Presencas.SingleOrDefaultAsync(p => p.Id == id);
         }
 
-public async Task<List<Presenca>> ObterPresencasAsync()
+        public async Task<List<Presenca>> ObterPresencasAsync()
         {
             return await _dataContext.Presencas.ToListAsync();
         }
 
-
-        
         public async Task<bool> PresencaPertenceAoUsuarioAsync(Guid id, Guid userId)
         {
-            var presenca = await _dataContext.Presencas.AsNoTracking().SingleOrDefaultAsync(predicate: p => p.Id == id);
+            var presenca = await _dataContext.Presencas.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id);
 
             return presenca != null && presenca.UserId == userId.ToString();
         }

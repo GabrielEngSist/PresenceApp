@@ -11,6 +11,8 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap4")]
+[assembly: Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute("Presence.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "C:\\Users\\Vitor\\source\\repos\\PresenceApp\\Presence.API", "Presence.API.csproj", "0")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Presence.IntegrationTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]

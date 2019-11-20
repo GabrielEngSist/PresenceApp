@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,5 +22,6 @@ namespace Presence.API.Domain
         [ForeignKey(nameof(InstituicaoId))]
         public Instituicao Instituicao { get; set; }
 
+        public IList<AlunoClasse> AlunoClasse { get; set; }
     }
 }

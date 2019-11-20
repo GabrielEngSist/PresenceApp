@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Presence.API.Domain.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,5 +14,9 @@ namespace Presence.API.Contracts.V1.Requests
         public string Email { get; set; }
 
         public string Senha { get; set; }
+
+        public string UserName { get; set; }
+
+        public TipoUsuario TipoUsuario { get; set; }
     }
 }

@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Presence.API.Contracts.V1.Requests;
+using Presence.API.Data;
+using Presence.API.Domain;
+using Presence.API.Options;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Presence.API.Data;
-using Presence.API.Domain;
-using Presence.API.Options;
 
 namespace Presence.API.Services
 {
@@ -21,23 +22,21 @@ namespace Presence.API.Services
         private readonly JwtSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly DataContext _dataContext;
+        private readonly IUsuarioStrategy _usuarioStrategy;
 
-
-        
-        
         public IdentityService(
             UserManager<IdentityUser> userManager,
             JwtSettings jwtSettings,
             TokenValidationParameters tokenValidationParameters,
-            DataContext dataContext)
+            DataContext dataContext,
+            IUsuarioStrategy usuarioStrategy)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _dataContext = dataContext;
+            _usuarioStrategy = usuarioStrategy;
         }
-
-
         
         public async Task<AuthenticationResult> LoginAsync(string email, string senha)
         {
@@ -64,8 +63,6 @@ namespace Presence.API.Services
             return await GerarResultadoDeAutenticacaoUsuarioAsync(usuario);
         }
 
-
-        
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
         {
             var tokenValidado = ObterPrincipalPeloToken(token);
@@ -173,28 +170,30 @@ namespace Presence.API.Services
             return (tokenDeSeguranca is JwtSecurityToken jwtSecurityToken) 
                 && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
         }
-
-
         
-        public async Task<AuthenticationResult> RegistrarAsync(string email, string senha)
+        public async Task<AuthenticationResult> RegistrarAsync(UserRegistrationRequest usuario)
         {
-            var usuarioExistente = await _userManager.FindByEmailAsync(email);
+            List<string> errors = await ValidarRegistroUsuario(usuario);
 
-            if (usuarioExistente != null)
+            if (errors.Any())
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Já existe um usuário cadastrado com este e-mail." }
+                    Errors = errors
                 };
             }
 
             var novoUsuario = new IdentityUser
             {
-                Email = email,
-                UserName = email
+                Email = usuario.Email,
+                UserName = usuario.UserName
             };
 
-            var usuarioCriado = await _userManager.CreateAsync(novoUsuario, senha);
+            var usuarioCriado = await _userManager.CreateAsync(novoUsuario, usuario.Senha);
+            var user = await _userManager.FindByEmailAsync(usuario.Email);
+
+            await _usuarioStrategy.RecuperarEstrategia(usuario)
+                .CriarUsuarioAsync(Guid.Parse(user.Id), usuario);
 
             if (!usuarioCriado.Succeeded)
             {
@@ -207,6 +206,24 @@ namespace Presence.API.Services
             return await GerarResultadoDeAutenticacaoUsuarioAsync(novoUsuario);
         }
 
+        private async Task<List<string>> ValidarRegistroUsuario(UserRegistrationRequest usuario)
+        {
+            var emailUtilizado = await _userManager.FindByEmailAsync(usuario.Email) != null;
+            var nomeUtilizado = await _userManager.FindByNameAsync(usuario.UserName) != null;
+            var errors = new List<String>();
+
+            if (emailUtilizado)
+            {
+                errors.Add($"Email {usuario.Email} já utilizado.");
+            }
+
+            if (nomeUtilizado)
+            {
+                errors.Add($"Nome {usuario.UserName} já utlilizado.");
+            }
+
+            return errors;
+        }
 
         private async Task<AuthenticationResult> GerarResultadoDeAutenticacaoUsuarioAsync(IdentityUser usuario)
         {

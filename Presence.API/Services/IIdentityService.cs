@@ -1,7 +1,5 @@
-﻿using Presence.API.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Presence.API.Contracts.V1.Requests;
+using Presence.API.Domain;
 using System.Threading.Tasks;
 
 namespace Presence.API.Services
@@ -9,8 +7,7 @@ namespace Presence.API.Services
 
     public interface IIdentityService
     {     
-        
-        Task<AuthenticationResult> RegistrarAsync(string email, string password);
+        Task<AuthenticationResult> RegistrarAsync(UserRegistrationRequest user);
 
         Task<AuthenticationResult> LoginAsync(string email, string senha);
         

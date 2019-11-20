@@ -33,7 +33,7 @@ namespace Presence.API.Controllers.V1
                 });
             }
 
-            var authResponse = await _identityService.RegistrarAsync(request.Email, request.Senha);
+            var authResponse = await _identityService.RegistrarAsync(request);
 
             if (!authResponse.Success)
             {

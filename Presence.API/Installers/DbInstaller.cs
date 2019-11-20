@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Presence.API.Data;
-using Presence.API.Extensions;
-using Presence.API.Options;
 using Presence.API.Options.DatabaseConfig;
-using Presence.API.Services;
 
 namespace Presence.API.Installers
 {
 
     public class DbInstaller : IInstaller
     {
-        
-        
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             var databaseConfig = new DatabaseConfig();
@@ -35,8 +25,6 @@ namespace Presence.API.Installers
                 );
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<DataContext>();
-
-            services.AddScoped<IPresencaService, PresencaService>();
         }
     }
 }

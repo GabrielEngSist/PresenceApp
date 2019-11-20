@@ -8,27 +8,26 @@ using System.Threading.Tasks;
 
 namespace Presence.API.Domain
 {
-
-    public class Presenca
+    public class Aluno
     {
         [Key]
         public Guid Id { get; set; }
 
-        public string Observacao { get; set; }
-
-        public int Nota { get; set;}
+        public string Matricula { get; set; }
 
         public string UserId { get; set; }
 
-        [Timestamp]
-        public DateTime DataCadastro { get; set; }
+        public Guid InstituicaoId { get; set; }
 
-        public Guid ClasseId { get; set; }
+        public string Nome { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; }
+        public IdentityUser Usuario { get; set; }
 
-        [ForeignKey(nameof(ClasseId))]
-        public Classe Classe { get; set; }
+        [ForeignKey(nameof(InstituicaoId))]
+        public Instituicao Instituicao { get; set; }
+
+        public IList<AlunoClasse> AlunoClasse { get; set; }
+
     }
 }

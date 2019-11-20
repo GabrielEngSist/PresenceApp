@@ -12,13 +12,13 @@ namespace Presence.API.Options.DatabaseConfig
         private DatabaseTypes _tipo;
         private string _connectionString;
 
-public DataBaseConfigFactory(DatabaseConfig databaseConfig)
+        public DataBaseConfigFactory(DatabaseConfig databaseConfig)
         {
             this._tipo = databaseConfig.Server.ObterValorEnum<DatabaseTypes>();
             this._connectionString = databaseConfig.ConnectionString;
         }
 
-public IConnectionStrings ObterImplementacao()
+        public IConnectionStrings ObterImplementacao()
         {
             switch (_tipo)
             {

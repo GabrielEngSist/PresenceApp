@@ -21,7 +21,6 @@ namespace Presence.API.Controllers.V1
             _identityService = identityService;            
         }
 
-
         [HttpPost(ApiRoutes.Identity.Register)]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
@@ -49,7 +48,6 @@ namespace Presence.API.Controllers.V1
                 RefreshToken = authResponse.RefreshToken,
             });
         }
-
 
         [HttpPost(ApiRoutes.Identity.Login)]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)

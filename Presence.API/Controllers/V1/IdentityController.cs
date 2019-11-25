@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Presence.API.Controllers.V1
 {
 
-    public class IdentityController : Controller
+    public class IdentityController : BaseController
     {
         private readonly IIdentityService _identityService;
 

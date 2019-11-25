@@ -1,7 +1,9 @@
-﻿namespace Presence.API.Services
+﻿using System;
+
+namespace Presence.API.Services
 {
     public interface IInstituicaoService : IUsuarioService
     {
-        
+        void RecuperarInstituicaoPeloUserId(Guid instituicaoId);
     }
 }

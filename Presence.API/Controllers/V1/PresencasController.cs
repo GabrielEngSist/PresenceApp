@@ -16,7 +16,7 @@ namespace Presence.API.Controllers.V1
 {
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class PresencasController : Controller
+    public class PresencasController : BaseController
     {
         private IPresencaService _presencaService;
 

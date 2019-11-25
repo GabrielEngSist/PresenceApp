@@ -9,8 +9,8 @@ using Presence.API.Data;
 namespace Presence.API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191117233156_NewEntitiesAddProfessorAlunoClasseERelacionamentosInstituicao")]
-    partial class NewEntitiesAddProfessorAlunoClasseERelacionamentosInstituicao
+    [Migration("20191124174347_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -239,7 +239,7 @@ namespace Presence.API.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Aluno");
+                    b.ToTable("Alunos");
                 });
 
             modelBuilder.Entity("Presence.API.Domain.AlunoClasse", b =>
@@ -254,7 +254,7 @@ namespace Presence.API.Data.Migrations
 
                     b.HasIndex("ClasseId");
 
-                    b.ToTable("AlunoClasse");
+                    b.ToTable("AlunosClasses");
                 });
 
             modelBuilder.Entity("Presence.API.Domain.Classe", b =>
@@ -278,7 +278,7 @@ namespace Presence.API.Data.Migrations
 
                     b.HasIndex("ProfessorId");
 
-                    b.ToTable("Classe");
+                    b.ToTable("Classes");
                 });
 
             modelBuilder.Entity("Presence.API.Domain.Instituicao", b =>
@@ -297,7 +297,7 @@ namespace Presence.API.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Instituicao");
+                    b.ToTable("Instituicoes");
                 });
 
             modelBuilder.Entity("Presence.API.Domain.Presenca", b =>
@@ -310,6 +310,8 @@ namespace Presence.API.Data.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DataCadastro")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Nota")
@@ -351,7 +353,7 @@ namespace Presence.API.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Professor");
+                    b.ToTable("Professores");
                 });
 
             modelBuilder.Entity("Presence.API.Domain.RefreshToken", b =>
@@ -472,8 +474,8 @@ namespace Presence.API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Presence.API.Domain.Professor", "Professor")
-                        .WithMany("Classe")
+                    b.HasOne("Presence.API.Domain.Professor", "professor")
+                        .WithMany()
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

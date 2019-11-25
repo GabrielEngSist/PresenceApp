@@ -17,6 +17,7 @@ namespace Presence.API.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<AlunoClasse>()
                 .HasKey(ac => new { ac.AlunoId, ac.ClasseId });
 

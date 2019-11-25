@@ -6,7 +6,6 @@ namespace Presence.API.Services
 {
     public class UsuarioStrategy : IUsuarioStrategy
     {
-        private TipoUsuario _tipoUsuario;
         private readonly IProfessorService _professorService;
         private readonly IInstituicaoService _instituicaoService;
         private readonly IAlunoService _alunoService;

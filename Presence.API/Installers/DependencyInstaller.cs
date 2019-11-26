@@ -13,6 +13,8 @@ namespace Presence.API.Installers
             services.AddScoped<IAlunoService, AlunoService>();
             services.AddScoped<IInstituicaoService, InstituicaoService>();
             services.AddScoped<IUsuarioStrategy, UsuarioStrategy>();
+            services.AddScoped<IClasseService, ClasseService>();
+            services.AddScoped<IChamadaService, ChamadaService>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Presence.API.Contracts.V1;
 using Presence.API.Contracts.V1.Requests;
 using Presence.API.Contracts.V1.Responses;
@@ -15,9 +16,11 @@ namespace Presence.API.Controllers.V1
     public class IdentityController : BaseController
     {
         private readonly IIdentityService _identityService;
+        private readonly IUsuarioStrategy _usuarioStrategy;
 
-        public IdentityController(IIdentityService identityService)
+        public IdentityController(IIdentityService identityService, IUsuarioStrategy usuarioStrategy)
         {
+            _usuarioStrategy = usuarioStrategy;
             _identityService = identityService;            
         }
 
@@ -47,6 +50,8 @@ namespace Presence.API.Controllers.V1
             {
                 Token = authResponse.Token,
                 RefreshToken = authResponse.RefreshToken,
+                TipoUsuario = authResponse.TipoUsuario,
+                Nome = authResponse.Nome,
             });
         }
 

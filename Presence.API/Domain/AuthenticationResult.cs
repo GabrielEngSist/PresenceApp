@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Presence.API.Domain.Enum;
 
 namespace Presence.API.Domain
 {
@@ -15,5 +16,7 @@ namespace Presence.API.Domain
         public IEnumerable<string> Errors { get; set; }
 
         public string RefreshToken { get; set; }
+        public TipoUsuario TipoUsuario { get; internal set; }
+        public string Nome { get; internal set; }
     }
 }

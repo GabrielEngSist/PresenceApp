@@ -7,8 +7,8 @@ namespace Presence.API.Domain.Enum
 {
     public enum TipoUsuario
     {
+        Instituicao,
         Professor,
         Aluno,
-        Instituicao,
     }
 }

@@ -45,5 +45,7 @@ namespace Presence.API.Data
         public DbSet<AlunoClasse> AlunosClasses { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+        public DbSet<Chamada> Chamadas { get; set; }
     }
 }

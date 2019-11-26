@@ -260,8 +260,14 @@ namespace Presence.API.Services
             {
                 Success = true,
                 Token = tokenHandler.WriteToken(token),
-                RefreshToken = refreshToken.Token
+                RefreshToken = refreshToken.Token,
+                Nome = usuario.UserName,
             };
+        }
+
+        public async Task<IdentityUser> ObterUsuarioPorEmailAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
         }
     }
 }

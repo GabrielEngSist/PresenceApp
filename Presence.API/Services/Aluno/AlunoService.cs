@@ -1,6 +1,7 @@
 ﻿using Presence.API.Contracts.V1.Requests;
 using Presence.API.Data;
 using Presence.API.Domain;
+using Presence.API.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Presence.API.Services
             this._dataContext = dataContext;
         }
 
-        public async Task CriarUsuarioAsync(Guid userId, UserRegistrationRequest usuario)
+        public async Task<TipoUsuario> CriarUsuarioAsync(Guid userId, UserRegistrationRequest usuario)
         {
             var instituicao = await _dataContext.Instituicoes.FindAsync(usuario.InstituicaoId);
 
@@ -35,6 +36,7 @@ namespace Presence.API.Services
             await _dataContext.Alunos.AddAsync(aluno);
 
             await _dataContext.SaveChangesAsync();
+            return TipoUsuario.Aluno;
         }
     }
 }

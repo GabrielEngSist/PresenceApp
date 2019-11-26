@@ -4,6 +4,7 @@ using Presence.API.Contracts.V1.Responses.Presenca;
 using Presence.API.Data;
 using Presence.API.Domain;
 using Presence.API.Utils;
+using Presence.API.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,11 @@ namespace Presence.API.Services
     public class PresencaService : IPresencaService
     {
         private readonly DataContext _dataContext;
-
-        public PresencaService(DataContext dataContext)
+        private readonly IChamadaService _chamadaService;
+        public PresencaService(DataContext dataContext, IChamadaService chamadaService)
         {
-            _dataContext = dataContext;
+            this._dataContext = dataContext;
+            this._chamadaService = chamadaService;
         }
 
         public async Task<bool> AtualizaPresencaAsync(Presenca presenca)
@@ -45,6 +47,18 @@ namespace Presence.API.Services
 
         public async Task<bool> CriarPresencaAsync(Presenca presenca)
         {
+            var chamada = await _chamadaService.ObterChamadaAsync(presenca.ChamadaId);
+
+            if (chamada == null)
+            {
+                throw new RequestException(System.Net.HttpStatusCode.NotFound, "Chamada não encontrada.");
+            }
+            
+            if (!chamada.Ativa)
+            {
+                throw new RequestException(System.Net.HttpStatusCode.BadRequest, "A chamada não está ativa!");
+            }
+
             await _dataContext.Presencas.AddAsync(presenca);
             var linhas = await _dataContext.SaveChangesAsync();
             return linhas > 0;

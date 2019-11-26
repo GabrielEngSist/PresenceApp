@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Presence.API.Domain
 {
@@ -18,6 +15,8 @@ namespace Presence.API.Domain
 
         public int Nota { get; set;}
 
+        public Guid ChamadaId { get; set; }
+
         public string UserId { get; set; }
 
         [Timestamp]
@@ -30,5 +29,8 @@ namespace Presence.API.Domain
 
         [ForeignKey(nameof(ClasseId))]
         public Classe Classe { get; set; }
+
+        [ForeignKey(nameof(ChamadaId))]
+        public Chamada Chamada { get; set; }
     }
 }

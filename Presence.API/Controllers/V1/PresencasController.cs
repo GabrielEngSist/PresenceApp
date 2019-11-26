@@ -7,9 +7,11 @@ using Presence.API.Contracts.V1.Responses;
 using Presence.API.Domain;
 using Presence.API.Extensions;
 using Presence.API.Services;
+using Presence.API.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Presence.API.Controllers.V1
@@ -108,24 +110,36 @@ namespace Presence.API.Controllers.V1
         [HttpPost(ApiRoutes.Presencas.Criar)]
         public async Task<IActionResult> CriarPresenca([FromBody] CriarPresencaPostRequest presencaContract)
         {
-            var presenca = new Presenca
+            try
             {
-                Observacao = presencaContract.Observacao,
-                UserId = HttpContext.ObterIdUsuario().ToString(),
-            };
+                var presenca = new Presenca
+                {
+                    Observacao = presencaContract.Observacao,
+                    UserId = HttpContext.ObterIdUsuario().ToString(),
+                    ChamadaId = presencaContract.ChamadaId,
+                };
 
-            var inserido = await _presencaService.CriarPresencaAsync(presenca);
+                var inserido = await _presencaService.CriarPresencaAsync(presenca);
 
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = baseUrl + ApiRoutes.Presencas.Obter.Replace("{id}", presenca.Id.ToString());
+                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+                var location = baseUrl + ApiRoutes.Presencas.Obter.Replace("{id}", presenca.Id.ToString());
 
-            var response = new ObterPresencaResponse
+                var response = new ObterPresencaResponse
+                {
+                    Id = presenca.Id,
+                    Observacao = presenca.Observacao,
+                };
+
+                return Created(location, response);
+            }
+            catch (RequestException ex) 
             {
-                Id = presenca.Id,
-                Observacao = presenca.Observacao,
-            };
-
-            return Created(location, response);
+                return await RetornoHttp(ex.GetStatus(), ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return await RetornoHttp(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

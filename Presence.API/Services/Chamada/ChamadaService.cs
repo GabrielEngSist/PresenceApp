@@ -19,7 +19,14 @@ namespace Presence.API.Services
 
         public async Task<Guid> CriarChamadaAsync(Guid classeId)
         {
-            var chamadaAtiva = await _dataContext.Chamadas.Where(c => c.ClasseId == classeId && c.Ativa).AnyAsync();
+            var existeClasse = await _dataContext.Classes.AnyAsync(c => c.Id == classeId);
+
+            if (!existeClasse)
+            {
+                throw new RequestException(System.Net.HttpStatusCode.BadRequest, "A classe solicitada não existe.");
+            }
+
+            var chamadaAtiva = await _dataContext.Chamadas.AnyAsync(c => c.ClasseId == classeId && c.Ativa);
 
             if (chamadaAtiva)
             {
@@ -32,7 +39,7 @@ namespace Presence.API.Services
                 Ativa = true,
             };
 
-            _dataContext.Chamadas.Add(chamada);
+            await _dataContext.Chamadas.AddAsync(chamada);
             await _dataContext.SaveChangesAsync();
             return chamada.Id;
         }

@@ -58,6 +58,18 @@ namespace Presence.API.Services
             {
                 throw new RequestException(System.Net.HttpStatusCode.BadRequest, "A chamada não está ativa!");
             }
+            presenca.ClasseId = chamada.ClasseId;
+
+            var alunoPertenceClasse = await _dataContext.AlunosClasses.Join(
+                _dataContext.Alunos, 
+                ac => ac.AlunoId, 
+                a => a.Id, 
+                (ac, a) => a).AnyAsync();
+
+            if (!alunoPertenceClasse)
+            {
+                throw new RequestException(System.Net.HttpStatusCode.BadRequest, "O Aluno não pertence a classe!");
+            }
 
             await _dataContext.Presencas.AddAsync(presenca);
             var linhas = await _dataContext.SaveChangesAsync();

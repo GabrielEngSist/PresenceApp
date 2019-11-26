@@ -9,6 +9,7 @@ using Presence.API.Contracts.V1.Responses.Presenca;
 using Presence.API.Data;
 using Presence.API.Domain;
 using Presence.API.Utils;
+using Presence.API.Utils.Exceptions;
 
 namespace Presence.API.Services
 {
@@ -23,13 +24,33 @@ namespace Presence.API.Services
 
         public async Task<AlunoClasse> CriarAlunoClasseAsync(AlunoClasse alunoClasse)
         {
+            var aluno = await _dataContext.Alunos.FindAsync(alunoClasse.AlunoId);
+            var classe = await _dataContext.Classes.FindAsync(alunoClasse.ClasseId);
+
+            if (aluno == null)
+            {
+                throw new RequestException(System.Net.HttpStatusCode.NotFound, "Aluno não existe.");
+            }
+
+            if (classe == null)
+            {
+                throw new RequestException(System.Net.HttpStatusCode.NotFound, "Classe não existe.");
+            }
+
+            if(aluno.InstituicaoId != classe.InstituicaoId)
+            {
+                throw new RequestException(System.Net.HttpStatusCode.BadRequest, "Aluno e classe não pertencem a mesma instituição.");
+            }
+
             await _dataContext.AlunosClasses.AddAsync(alunoClasse);
+            await _dataContext.SaveChangesAsync();
             return alunoClasse;
         }
 
         public async Task<Classe> CriarClasseAsync(Classe classe)
         {
             await _dataContext.Classes.AddAsync(classe);
+            await _dataContext.SaveChangesAsync();
             return classe;
         }
 
@@ -91,6 +112,11 @@ namespace Presence.API.Services
                     Instituicao = cpi.i.ConverterParaIdNomeDto("Descricao"),
                     Professor = cpi.cp.p.ConverterParaIdNomeDto("Nome")
                 }).ToListAsync();
+        }
+
+        public async Task<Classe> ObterClasseAsync(Guid id)
+        {
+            return await this._dataContext.Classes.FindAsync(id);
         }
     }
 }

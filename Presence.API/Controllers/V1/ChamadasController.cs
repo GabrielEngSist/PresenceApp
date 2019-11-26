@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Presence.API.Contracts.V1;
 using Presence.API.Services;
 using System;
@@ -9,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace Presence.API.Controllers.V1
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class ChamadasController : BaseController
     {
         private readonly IChamadaService _chamadaService;

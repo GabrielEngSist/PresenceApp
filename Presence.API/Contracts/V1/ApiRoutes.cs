@@ -33,6 +33,7 @@ namespace Presence.API.Contracts.V1
             public const string Criar = Base + "/classes";
             public const string Obter = Base + "/classes/{id}";
             public const string Pesquisar = Base + "/classes";
+            public const string AdicionarAluno = Base + "/classes/{classeId}/{alunoId}";
         }
 
         public static class Chamadas

@@ -18,5 +18,6 @@ namespace Presence.API.Services
             Guid alunoId,
             Guid instituicaoId,
             Guid classeId);
+        Task<Classe> ObterClasseAsync(Guid id);
     }
 }

@@ -9,8 +9,6 @@ namespace Presence.API.Contracts.V1.Requests.Classe
     {
         public string Descricao { get; set; }
 
-        public Guid ProfessorId { get; set; }
-
         public Guid InstituicaoId { get; set; }
     }
 }
